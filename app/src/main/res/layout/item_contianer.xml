@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="tv"
+            type="com.example.model.TVShow" />
+
+    </data>
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/background_container"
+            android:layout_marginTop="@dimen/_8sdp"
+            >
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_15sdp"
+                app:layout_constraintTop_toTopOf="@id/container_image"
+                android:background="@color/colorPrimary"
+                />
+
+            <com.makeramen.roundedimageview.RoundedImageView
+                android:id="@+id/container_image"
+                android:layout_width="@dimen/_70sdp"
+                image="@{tv.image_thumbnail_path}"
+                android:layout_height="@dimen/_100sdp"
+                android:scaleType="centerCrop"
+                app:riv_corner_radius="@dimen/_4sdp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:background="@drawable/image_background" />
+
+
+<!--            <View-->
+<!--                android:layout_width="match_parent"-->
+<!--                android:layout_height="0dp"-->
+<!--                android:background="@drawable/background_container"-->
+<!--                app:layout_constraintBottom_toBottomOf="parent"-->
+<!--                app:layout_constraintTop_toTopOf="@+id/container_textName" />-->
+
+            <TextView
+                android:id="@+id/container_textName"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{tv.name}"
+                android:maxLines="1"
+                app:layout_constraintStart_toEndOf="@id/container_image"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/ubuntu_medium"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/_20sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:textColor="@color/colorAccent"
+                android:textSize="@dimen/_13ssp"
+                android:paddingTop="@dimen/_6sdp" />
+
+            <TextView
+                android:id="@+id/container_textNetwork"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text='@{tv.network + " (" + tv.country+ ")"}'
+                app:layout_constraintStart_toEndOf="@id/container_image"
+                app:layout_constraintTop_toBottomOf="@+id/container_textName"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/ubuntu_medium"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:textColor="@color/colorIcons"
+                android:textSize="@dimen/_12ssp"
+                android:paddingTop="@dimen/_6sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/container_textStart"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text='@{"start in: "+tv.start_date}'
+                app:layout_constraintStart_toEndOf="@id/container_image"
+                app:layout_constraintTop_toBottomOf="@+id/container_textNetwork"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/ubuntu_medium"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:textColor="@color/colorIcons"
+                android:textSize="@dimen/_12ssp"
+                android:paddingTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp" />
+
+            <TextView
+                android:id="@+id/container_textState"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@{tv.status}"
+                app:layout_constraintStart_toEndOf="@id/container_image"
+                app:layout_constraintTop_toBottomOf="@+id/container_textStart"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:fontFamily="@font/ubuntu_medium"
+                android:includeFontPadding="false"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:textColor="@color/colorIcons"
+                android:paddingBottom="@dimen/_6sdp"
+                android:textSize="@dimen/_12ssp"
+                android:paddingTop="@dimen/_6sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_8sdp"
+                />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
