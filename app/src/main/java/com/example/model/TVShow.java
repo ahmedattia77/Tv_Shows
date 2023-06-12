@@ -2,6 +2,7 @@ package com.example.model;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.Date;
 
 public class TVShow {

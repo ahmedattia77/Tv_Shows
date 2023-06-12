@@ -8,7 +8,7 @@ import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
 public class BindingViewAdapter {
-    @BindingAdapter("image")
+    @BindingAdapter("imageURL")
     public static void setImageURL (ImageView imageView,String URL){
             try{
                 imageView.setAlpha(0f);

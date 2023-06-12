@@ -1,19 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
         <variable
             name="tv"
             type="com.example.model.TVShow" />
-
     </data>
 
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/item_layout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/background_container"
+            android:background="@drawable/ripple"
             android:layout_marginTop="@dimen/_8sdp"
             >
 
@@ -27,7 +28,7 @@
             <com.makeramen.roundedimageview.RoundedImageView
                 android:id="@+id/container_image"
                 android:layout_width="@dimen/_70sdp"
-                image="@{tv.image_thumbnail_path}"
+                imageURL="@{tv.image_thumbnail_path}"
                 android:layout_height="@dimen/_100sdp"
                 android:scaleType="centerCrop"
                 app:riv_corner_radius="@dimen/_4sdp"
@@ -35,13 +36,6 @@
                 app:layout_constraintTop_toTopOf="parent"
                 android:background="@drawable/image_background" />
 
-
-<!--            <View-->
-<!--                android:layout_width="match_parent"-->
-<!--                android:layout_height="0dp"-->
-<!--                android:background="@drawable/background_container"-->
-<!--                app:layout_constraintBottom_toBottomOf="parent"-->
-<!--                app:layout_constraintTop_toTopOf="@+id/container_textName" />-->
 
             <TextView
                 android:id="@+id/container_textName"
