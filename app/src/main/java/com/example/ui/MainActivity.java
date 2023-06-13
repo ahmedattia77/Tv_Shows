@@ -90,11 +90,7 @@ public class MainActivity extends AppCompatActivity implements TVShowListener{
     @Override
     public void onMovieClicked(TVShow tvShow) {
         Intent intent = new Intent(getApplicationContext() , MovieDetails.class );
-        intent.putExtra("id" ,tvShow.getId());
-        intent.putExtra("name" ,tvShow.getName());
-        intent.putExtra("startDate" ,tvShow.getStart_date());
-        intent.putExtra("endDate" ,tvShow.getEnd_date());
-        intent.putExtra("thumbnailPath" ,tvShow.getImage_thumbnail_path());
+        intent.putExtra("tv_show" , tvShow);
         startActivity(intent);
     }
 

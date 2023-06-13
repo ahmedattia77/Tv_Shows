@@ -53,7 +53,7 @@
                 android:id="@+id/main_eye"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/ic_eye"
+                android:src="@drawable/watch_later_24"
                 android:layout_margin="@dimen/_8sdp"
                 app:tint="@color/colorWhite"
                 />

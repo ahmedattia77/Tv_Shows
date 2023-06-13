@@ -15,10 +15,13 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
-            android:name="com.example.ui.MovieDetails"
+            android:name=".WatchLaterActivity"
             android:exported="false" />
         <activity
-            android:name="com.example.ui.MainActivity"
+            android:name=".ui.MovieDetails"
+            android:exported="false" />
+        <activity
+            android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

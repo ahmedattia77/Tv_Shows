@@ -2,31 +2,60 @@ package com.example.ui;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
+import androidx.core.text.HtmlCompat;
 import androidx.databinding.DataBindingUtil;
 
 import androidx.lifecycle.ViewModelProvider;
+import androidx.room.Database;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.telecom.Call;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import com.example.Database.TVShowDatabase;
+import com.example.Database.TVShowDatabase_Impl;
+import com.example.model.Episode;
+import com.example.model.TVShow;
 import com.example.tvshows.R;
 import com.example.tvshows.databinding.ActivityMovieDetailsBinding;
+import com.example.tvshows.databinding.BottonSheetContianerBinding;
+import com.example.tvshows.databinding.EpisoesBottonSheetBinding;
+import com.example.ui.adapters.EpisodesAdapter;
 import com.example.ui.adapters.ImageSliderAdapter;
 import com.example.ui.viewModel.MostPopularTVShowDetailsViewModel;
+import com.google.android.material.bottomsheet.BottomSheetDialog;
 
+import java.util.List;
+import java.util.Locale;
+import java.util.zip.Inflater;
+
+import io.reactivex.Scheduler;
+import io.reactivex.android.schedulers.AndroidSchedulers;
+import io.reactivex.disposables.CompositeDisposable;
+import io.reactivex.functions.Action;
+import io.reactivex.schedulers.Schedulers;
 import retrofit2.http.Url;
 
 public class MovieDetails extends AppCompatActivity {
 
     private ActivityMovieDetailsBinding binding;
     private MostPopularTVShowDetailsViewModel detailsViewModel;
+    private EpisoesBottonSheetBinding bindingSheet;
+    private EpisodesAdapter episodesAdapter;
+    BottomSheetDialog bottomSheetDialog;
+    TVShow tvShow ;
 
+    TVShowDatabase tvShowDatabase;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,15 +74,9 @@ public class MovieDetails extends AppCompatActivity {
 
     private void getDataMovieDetails (){
         binding.setIsLoading(true);
-        String tvShowSentId = String.valueOf(getIntent().getIntExtra("id",-1));
-        String tvShowSentName = getIntent().getStringExtra("name");
-        String tvShowSentStartDate = String.valueOf(getIntent().getIntExtra("startDate",-1));
-        String tvShowSentEndDate = String.valueOf(getIntent().getIntExtra("endDate",-1));
-        String tvShowSentThumbnailPath = String.valueOf(getIntent().getIntExtra("thumbnailPath",-1));
+        tvShow = (TVShow) getIntent().getSerializableExtra("tv_show");
 
-        binding.setTvShowImage(tvShowSentThumbnailPath);
-
-        detailsViewModel.getMostPopularTVShowsDetailsRepository(tvShowSentId).observe(this
+        detailsViewModel.getMostPopularTVShowsDetailsRepository(String.valueOf(tvShow.getId())).observe(this
         , tvShowDetailsResponse -> {
             if (tvShowDetailsResponse.getTvShowDetails() != null){
                 if(tvShowDetailsResponse.getTvShowDetails().getPictures() != null){
@@ -61,7 +84,30 @@ public class MovieDetails extends AppCompatActivity {
                     initialSlider(tvShowDetailsResponse.getTvShowDetails().getPictures());
                 }
                 binding.setTvShowImage(tvShowDetailsResponse.getTvShowDetails().getImagePath());
-                binding.setTvShowName(tvShowSentName);
+                binding.thumbnailPath.setVisibility(View.VISIBLE);
+                getMovieDetails(
+                 tvShowDetailsResponse.getTvShowDetails().getDescription()
+                ,tvShowDetailsResponse.getTvShowDetails().getRating()
+                ,tvShowDetailsResponse.getTvShowDetails().getGenres()[0]
+                ,tvShowDetailsResponse.getTvShowDetails().getRuntime()
+                ,tvShowDetailsResponse.getTvShowDetails().getUrl()
+                ,tvShowDetailsResponse.getTvShowDetails().getEpisodes()
+                );
+
+                binding.watchLater.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        new CompositeDisposable().add(detailsViewModel.insertTVShow(tvShow)
+                                .subscribeOn(Schedulers.io())
+                                .observeOn(AndroidSchedulers.mainThread())
+                                .subscribe(() -> {
+                                    binding.watchLater.setImageResource(R.drawable.baseline_check_);
+                                    Toast.makeText(MovieDetails.this, "added To Watch later list", Toast.LENGTH_SHORT).show();
+                                })
+                        );
+                    }
+                });
+
             }
         });
     }
@@ -113,5 +159,85 @@ public class MovieDetails extends AppCompatActivity {
                         getApplicationContext(),R.drawable.backgroung_slider_indicator));
             }
         }
+    }
+
+    private void getMovieDetails(String description , String rate , String genre , int runtime
+     , String URI , List<Episode> episodes){
+
+          tvShow = (TVShow) getIntent().getSerializableExtra("tv_show");
+
+        binding.setTvShowName(tvShow.getName());
+        binding.setStatus(tvShow.getStatus());
+        binding.setStartDate(tvShow.getStart_date());
+        binding.setNetworkCountry(tvShow.getNetwork() +"(" + tvShow.getCountry() +")");
+        binding.setDescription(String.valueOf(
+                HtmlCompat.fromHtml(description ,HtmlCompat.FROM_HTML_MODE_LEGACY)
+        ));
+
+        binding.readMore.setOnClickListener(v -> {
+            if (binding.readMore.getText().toString().equals("Read More")){
+                binding.description.setMaxLines(Integer.MAX_VALUE);
+                binding.description.setEllipsize(null);
+                binding.readMore.setText(R.string.read_less);
+            }
+            else{
+                binding.readMore.setText(R.string.read_more);
+                binding.description.setMaxLines(4);
+                binding.description.setEllipsize(TextUtils.TruncateAt.END);
+            }
+        });
+
+        binding.setRate(String.format(
+                Locale.getDefault(),
+                "%.1f",
+                Double.parseDouble(rate)
+        ));
+
+        if(genre != null)
+            binding.setGenre(genre);
+        else
+            binding.genre.setText("N/A");
+
+        binding.setRuntime(runtime + "Min");
+
+
+        binding.websiteButton.setOnClickListener(v -> {
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(URI));
+            startActivity(intent);
+        });
+
+        binding.episodesButton.setOnClickListener(v -> {
+            if (bottomSheetDialog == null){
+                bottomSheetDialog = new BottomSheetDialog(MovieDetails.this);
+                bindingSheet = DataBindingUtil.inflate(
+                        LayoutInflater.from(MovieDetails.this),
+                        R.layout.episoes_botton_sheet,
+                        findViewById(R.id.contianer_sheet),
+                        false
+                );
+                bottomSheetDialog.setContentView(bindingSheet.getRoot());
+                bindingSheet.recycle.setAdapter(new EpisodesAdapter(episodes));
+                bindingSheet.title.setText(String.format("Episodes | %s" , tvShow.getName()));
+
+                bindingSheet.cancel.setOnClickListener(v1 -> bottomSheetDialog.dismiss());
+            }
+            bottomSheetDialog.show();
+        });
+
+        binding.name.setVisibility(View.VISIBLE);
+        binding.status.setVisibility(View.VISIBLE);
+        binding.startDate.setVisibility(View.VISIBLE);
+        binding.country.setVisibility(View.VISIBLE);
+        binding.description.setVisibility(View.VISIBLE);
+        binding.readMore.setVisibility(View.VISIBLE);
+        binding.layMisc.setVisibility(View.VISIBLE);
+        binding.divi.setVisibility(View.VISIBLE);
+        binding.divi2.setVisibility(View.VISIBLE);
+        binding.websiteButton.setVisibility(View.VISIBLE);
+        binding.episodesButton.setVisibility(View.VISIBLE);
+        binding.sliderPages.setVisibility(View.VISIBLE);
+        binding.watchLater.setVisibility(View.VISIBLE);
+
     }
 }
