@@ -1,7 +1,6 @@
 package com.example.ui.adapters;
 
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 
 import androidx.annotation.NonNull;
@@ -11,8 +10,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.model.Episode;
 import com.example.tvshows.R;
 import com.example.tvshows.databinding.BottonSheetContianerBinding;
-import com.example.tvshows.databinding.EpisoesBottonSheetBinding;
-
 import java.util.List;
 
 public class EpisodesAdapter extends RecyclerView.Adapter<EpisodesAdapter.EpisodeHolder>{

@@ -6,14 +6,12 @@ import androidx.core.text.HtmlCompat;
 import androidx.databinding.DataBindingUtil;
 
 import androidx.lifecycle.ViewModelProvider;
-import androidx.room.Database;
 import androidx.viewpager.widget.ViewPager;
 import androidx.viewpager2.widget.ViewPager2;
 
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.telecom.Call;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -23,39 +21,36 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.Database.TVShowDatabase;
-import com.example.Database.TVShowDatabase_Impl;
 import com.example.model.Episode;
 import com.example.model.TVShow;
 import com.example.tvshows.R;
 import com.example.tvshows.databinding.ActivityMovieDetailsBinding;
-import com.example.tvshows.databinding.BottonSheetContianerBinding;
 import com.example.tvshows.databinding.EpisoesBottonSheetBinding;
 import com.example.ui.adapters.EpisodesAdapter;
 import com.example.ui.adapters.ImageSliderAdapter;
-import com.example.ui.viewModel.MostPopularTVShowDetailsViewModel;
+import com.example.ui.utilities.DataHolder;
+import com.example.ui.viewModel.TVShowDetailsViewModel;
+import com.example.ui.viewModel.WatchListViewModel;
 import com.google.android.material.bottomsheet.BottomSheetDialog;
 
 import java.util.List;
 import java.util.Locale;
-import java.util.zip.Inflater;
 
-import io.reactivex.Scheduler;
 import io.reactivex.android.schedulers.AndroidSchedulers;
 import io.reactivex.disposables.CompositeDisposable;
-import io.reactivex.functions.Action;
 import io.reactivex.schedulers.Schedulers;
-import retrofit2.http.Url;
 
 public class MovieDetails extends AppCompatActivity {
 
     private ActivityMovieDetailsBinding binding;
-    private MostPopularTVShowDetailsViewModel detailsViewModel;
+    private TVShowDetailsViewModel detailsViewModel;
     private EpisoesBottonSheetBinding bindingSheet;
     private EpisodesAdapter episodesAdapter;
-    BottomSheetDialog bottomSheetDialog;
-    TVShow tvShow ;
+    private BottomSheetDialog bottomSheetDialog;
+    private TVShow tvShow ;
 
-    TVShowDatabase tvShowDatabase;
+    private TVShowDatabase tvShowDatabase;
+    private Boolean isWatchLater  = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,9 +62,10 @@ public class MovieDetails extends AppCompatActivity {
     }
 
     private void initialData (){
-        detailsViewModel = new ViewModelProvider(this).get(MostPopularTVShowDetailsViewModel.class);
-        getDataMovieDetails();
+        detailsViewModel = new ViewModelProvider(this).get(TVShowDetailsViewModel.class);
         binding.backSpace.setOnClickListener( v -> onBackPressed());
+        getDataMovieDetails();
+        isWatchLaterItem();
     }
 
     private void getDataMovieDetails (){
@@ -93,20 +89,6 @@ public class MovieDetails extends AppCompatActivity {
                 ,tvShowDetailsResponse.getTvShowDetails().getUrl()
                 ,tvShowDetailsResponse.getTvShowDetails().getEpisodes()
                 );
-
-                binding.watchLater.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        new CompositeDisposable().add(detailsViewModel.insertTVShow(tvShow)
-                                .subscribeOn(Schedulers.io())
-                                .observeOn(AndroidSchedulers.mainThread())
-                                .subscribe(() -> {
-                                    binding.watchLater.setImageResource(R.drawable.baseline_check_);
-                                    Toast.makeText(MovieDetails.this, "added To Watch later list", Toast.LENGTH_SHORT).show();
-                                })
-                        );
-                    }
-                });
 
             }
         });
@@ -153,10 +135,10 @@ public class MovieDetails extends AppCompatActivity {
             ImageView imageView = (ImageView) binding.layoutIndicator.getChildAt(index);
             if (index == position){
                 imageView.setImageDrawable(ContextCompat.getDrawable(
-                        getApplicationContext(),R.drawable.backgroung_slider_indicator_active));
+                getApplicationContext(),R.drawable.backgroung_slider_indicator_active));
             }else{
                 imageView.setImageDrawable(ContextCompat.getDrawable(
-                        getApplicationContext(),R.drawable.backgroung_slider_indicator));
+                getApplicationContext(),R.drawable.backgroung_slider_indicator));
             }
         }
     }
@@ -225,6 +207,18 @@ public class MovieDetails extends AppCompatActivity {
             bottomSheetDialog.show();
         });
 
+
+        binding.watchLater.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                    if (isWatchLater){              // watch list
+                        removeWatchLaterItem();
+                    }else {                         // not watch list
+                        addWatchLaterItem();
+                    }
+            }
+        });
+
         binding.name.setVisibility(View.VISIBLE);
         binding.status.setVisibility(View.VISIBLE);
         binding.startDate.setVisibility(View.VISIBLE);
@@ -238,6 +232,44 @@ public class MovieDetails extends AppCompatActivity {
         binding.episodesButton.setVisibility(View.VISIBLE);
         binding.sliderPages.setVisibility(View.VISIBLE);
         binding.watchLater.setVisibility(View.VISIBLE);
-
     }
+
+    private void isWatchLaterItem(){
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(detailsViewModel.getTVShowFromWatchLater(String.valueOf(tvShow.getId())).observeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(tvShow -> {
+                        binding.watchLater.setImageResource(R.drawable.baseline_check_24);
+                        isWatchLater = true;
+                        compositeDisposable.dispose();
+                }));
+    }
+
+    private void removeWatchLaterItem(){
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(detailsViewModel.removeTVShowWatchLater(tvShow).subscribeOn(Schedulers.computation())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(() -> {
+                    DataHolder.CHECK_DATA_CHANGE = true;
+                    isWatchLater = false;
+                    binding.watchLater.setImageResource(R.drawable.watch_later_24);
+                    Toast.makeText(this, "Removed from watch later list", Toast.LENGTH_SHORT).show();
+                    compositeDisposable.dispose();
+                }));
+    }
+
+    private void addWatchLaterItem(){
+        CompositeDisposable compositeDisposable = new CompositeDisposable();
+        compositeDisposable.add(detailsViewModel.insertTVShow(tvShow).subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe( () -> {
+                    DataHolder.CHECK_DATA_CHANGE = true;
+                    isWatchLater = true;
+                    binding.watchLater.setImageResource(R.drawable.baseline_check_24);
+                    Toast.makeText(this, "Added to watch later list", Toast.LENGTH_SHORT).show();
+                    compositeDisposable.dispose();
+                }));
+    }
+
+
 }

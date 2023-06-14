@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="?actionBarSize"
             android:orientation="horizontal"
-            android:background="@color/colorQuickActionBackground"
+            android:background="@color/colorMiscellaneousBackground"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -50,7 +50,7 @@
                 />
 
             <ImageView
-                android:id="@+id/main_eye"
+                android:id="@+id/main_watchLater"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@drawable/watch_later_24"

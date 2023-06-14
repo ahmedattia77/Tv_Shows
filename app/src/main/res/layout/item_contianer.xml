@@ -108,6 +108,19 @@
                 android:layout_marginStart="@dimen/_8sdp"
                 />
 
+            <ImageView
+                android:id="@+id/delete"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:src="@drawable/delete_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginEnd="@dimen/_4sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                app:tint="@color/colorNoteColor3"
+                android:visibility="gone"
+                />
+
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>

@@ -1,27 +1,29 @@
 package com.example.ui.adapters;
 
-import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
+
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.motion.widget.OnSwipe;
 import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.listeners.TVShowListener;
+import com.example.listeners.WatchLaterListener;
 import com.example.model.TVShow;
 import com.example.tvshows.R;
 import com.example.tvshows.databinding.ItemContianerBinding;
+import com.example.ui.WatchLaterActivity;
 
 import java.util.List;
 
-public class TVAdapter  extends RecyclerView.Adapter<TVAdapter.TVShowAdapter>  {
+public class TVLaterAdapter extends RecyclerView.Adapter<TVLaterAdapter.TVShowAdapter> {
 
     private List<TVShow> showList;
     private LayoutInflater layoutInflater;
-    private TVShowListener tvShowListener;
+    private WatchLaterListener tvShowListener;
 
-    public TVAdapter(List<TVShow> showList , TVShowListener tvShowListener) {
+    public TVLaterAdapter(List<TVShow> showList , WatchLaterListener tvShowListener) {
         this.showList = showList;
         this.tvShowListener = tvShowListener;
     }
@@ -62,7 +64,10 @@ public class TVAdapter  extends RecyclerView.Adapter<TVAdapter.TVShowAdapter>  {
         public void bindTVShow (TVShow tvShow){
         binding.setTv(tvShow);
         binding.executePendingBindings();
-        binding.getRoot().setOnClickListener(v -> tvShowListener.onMovieClicked(tvShow));
+        binding.getRoot().setOnClickListener(v -> tvShowListener.onTVSHowClick(tvShow));
+        binding.delete.setOnClickListener(v -> tvShowListener.removeTVShowWatchLater(tvShow ,getAdapterPosition()));
+        binding.delete.setVisibility(View.VISIBLE);
         }
+
     }
 }

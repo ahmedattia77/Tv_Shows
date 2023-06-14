@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy;
 import androidx.room.Query;
 
 import com.example.model.TVShow;
+import com.google.android.material.color.utilities.QuantizerWsmeans;
 
 import java.util.List;
 
@@ -20,8 +21,12 @@ public interface TVShowDao {
     Completable addWatchLater(TVShow tvShow);
 
     @Delete
-    void deleteTVShow (TVShow tvShow);
+    Completable deleteTVShow (TVShow tvShow);
 
     @Query("SELECT * FROM tv_show")
     Flowable<List<TVShow>> getWatchLater ();
+
+    @Query("SELECT * FROM tv_show WHERE id = :tvId")
+    Flowable<TVShow> getWatchLater (String tvId);
+
 }

@@ -9,8 +9,6 @@ import androidx.room.RoomDatabase;
 import com.example.Doa.TVShowDao;
 import com.example.model.TVShow;
 
-import java.util.ConcurrentModificationException;
-
 @Database(entities = TVShow.class , version = 1 , exportSchema = false)
 public abstract class TVShowDatabase extends RoomDatabase {
 
