@@ -8,7 +8,7 @@ import com.example.response.TVShowResponse;
 
 public class MostPopularTVShowViewModel extends ViewModel {
 
-    MostPopularTVShowsRepository mostPopularTVShowsRepository;
+    private MostPopularTVShowsRepository mostPopularTVShowsRepository;
 
     public MostPopularTVShowViewModel (){
         mostPopularTVShowsRepository = new MostPopularTVShowsRepository();

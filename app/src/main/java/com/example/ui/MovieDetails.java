@@ -252,7 +252,7 @@ public class MovieDetails extends AppCompatActivity {
                 .subscribe(() -> {
                     DataHolder.CHECK_DATA_CHANGE = true;
                     isWatchLater = false;
-                    binding.watchLater.setImageResource(R.drawable.watch_later_24);
+                    binding.watchLater.setImageResource(R.drawable.outline_watch_later_24);
                     Toast.makeText(this, "Removed from watch later list", Toast.LENGTH_SHORT).show();
                     compositeDisposable.dispose();
                 }));
