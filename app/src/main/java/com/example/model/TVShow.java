@@ -1,12 +1,15 @@
 package com.example.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
 import androidx.room.Entity;
 import androidx.room.PrimaryKey;
 
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.Date;
 
 @Entity(tableName = "tv_show")
 public class TVShow implements Serializable {
@@ -29,6 +32,7 @@ public class TVShow implements Serializable {
     private String status;
     @SerializedName("image_thumbnail_path")
     private String image_thumbnail_path;
+
 
     public int getId() {
         return id;

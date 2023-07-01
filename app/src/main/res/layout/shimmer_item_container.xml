@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/_8sdp"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+
+
+
+        <com.makeramen.roundedimageview.RoundedImageView
+            android:id="@+id/container_image"
+            android:layout_width="@dimen/_70sdp"
+            imageURL="@{tv.image_thumbnail_path}"
+            android:layout_height="@dimen/_100sdp"
+            android:scaleType="centerCrop"
+            app:riv_corner_radius="@dimen/_4sdp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:background="@color/shimmerBackground" />
+
+
+        <TextView
+            android:id="@+id/container_textName"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/container_image"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:background="@color/shimmerBackground"
+            android:paddingTop="@dimen/_6sdp" />
+
+        <TextView
+            android:id="@+id/container_textNetwork"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/container_image"
+            app:layout_constraintTop_toBottomOf="@+id/container_textName"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@color/shimmerBackground"
+            android:paddingTop="@dimen/_6sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/container_textStart"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/container_image"
+            app:layout_constraintTop_toBottomOf="@+id/container_textNetwork"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@color/shimmerBackground"
+            android:paddingTop="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp" />
+
+        <TextView
+            android:id="@+id/container_textState"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/container_image"
+            app:layout_constraintTop_toBottomOf="@+id/container_textStart"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginTop="@dimen/_4sdp"
+            android:background="@color/shimmerBackground"
+            android:paddingBottom="@dimen/_6sdp"
+            android:paddingTop="@dimen/_6sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            />
+
+        <ImageView
+            android:id="@+id/delete"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:src="@drawable/delete_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:layout_marginEnd="@dimen/_4sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            app:tint="@color/colorNoteColor3"
+            android:visibility="gone"
+            />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

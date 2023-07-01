@@ -146,7 +146,7 @@ public class MovieDetails extends AppCompatActivity {
     private void getMovieDetails(String description , String rate , String genre , int runtime
      , String URI , List<Episode> episodes){
 
-          tvShow = (TVShow) getIntent().getSerializableExtra("tv_show");
+        tvShow = (TVShow) getIntent().getSerializableExtra("tv_show");
 
         binding.setTvShowName(tvShow.getName());
         binding.setStatus(tvShow.getStatus());
@@ -211,14 +211,19 @@ public class MovieDetails extends AppCompatActivity {
         binding.watchLater.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (isWatchLater){              // watch list
+                    if (isWatchLater){
                         removeWatchLaterItem();
-                    }else {                         // not watch list
+                    }else {
                         addWatchLaterItem();
                     }
             }
         });
 
+        enableVisibility();
+
+    }
+
+    private void enableVisibility() {
         binding.name.setVisibility(View.VISIBLE);
         binding.status.setVisibility(View.VISIBLE);
         binding.startDate.setVisibility(View.VISIBLE);

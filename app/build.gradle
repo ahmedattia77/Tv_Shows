@@ -71,6 +71,9 @@ dependencies {
     //rounded image view
     implementation 'com.makeramen:roundedimageview:2.3.0'
 
+    //shimmer
+    implementation 'io.supercharge:shimmerlayout:2.1.0'
+
 
 
 

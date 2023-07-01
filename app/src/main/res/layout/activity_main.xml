@@ -69,6 +69,30 @@
 
         </LinearLayout>
 
+
+        <io.supercharge.shimmerlayout.ShimmerLayout
+            android:id="@+id/shimmer_frame_layout"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:layout_constraintTop_toBottomOf="@+id/linear_actionBar"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:shimmer_auto_start="true"
+            app:shimmer_animation_duration="1500"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+                    <include layout="@layout/shimmer_item_container"/>
+                    <include layout="@layout/shimmer_item_container"/>
+                    <include layout="@layout/shimmer_item_container"/>
+                    <include layout="@layout/shimmer_item_container"/>
+                    <include layout="@layout/shimmer_item_container"/>
+
+            </LinearLayout>
+        </io.supercharge.shimmerlayout.ShimmerLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/main_recycle"
             android:layout_width="match_parent"
@@ -77,18 +101,10 @@
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toBottomOf="@id/linear_actionBar"
-
+            android:visibility="gone"
             />
 
-        <ProgressBar
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
-            android:layout_margin="@dimen/_10sdp"
-            android:visibility="@{isLoading ? View.VISIBLE : View.GONE, default = gone}"
-            app:layout_constraintTop_toBottomOf="@id/linear_actionBar"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            />
+
         <ProgressBar
             android:layout_width="@dimen/_25sdp"
             android:layout_height="@dimen/_25sdp"

@@ -73,6 +73,10 @@ public class MainActivity extends AppCompatActivity implements TVShowListener {
             isCurrentPageLoaded();
             if (mostMovies != null) {
                 if (mostMovies.getTvShows() != null) {
+                    binding.shimmerFrameLayout.stopShimmerAnimation();
+                    binding.shimmerFrameLayout.setVisibility(View.GONE);
+                    binding.mainRecycle.setVisibility(View.VISIBLE);
+
                     int previous = tvShowList.size();
                     allPage = mostMovies.getPages();
                     tvShowList.addAll(mostMovies.getTvShows());
@@ -83,13 +87,15 @@ public class MainActivity extends AppCompatActivity implements TVShowListener {
     }
 
     private void isCurrentPageLoaded() {
+        Boolean shimmer = true;
+
         if (currentPage == 1) {
 
-            if (binding.getIsLoading() != null && binding.getIsLoading()) {
-                binding.setIsLoading(false);
-            } else {
-                binding.setIsLoading(true);
-            }
+//            if (shimmer != null && binding.getIsLoading()) {
+//                binding.setIsLoading(false);
+//                shimmer = false;
+//            } else {
+//                binding.setIsLoading(true)
 
         } else {
 

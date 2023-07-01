@@ -31,7 +31,6 @@ public class SearchActivity extends AppCompatActivity implements TVShowListener 
     private ActivitySearchBinding binding;
     private List<TVShow> tvShowList;
     private SearchTVShowViewModel tvShowViewModel;
-    private TVShowListener tvShowListener;
     private TVAdapter tvAdapter;
     private int currentPage = 1;
     private int total = 1;
